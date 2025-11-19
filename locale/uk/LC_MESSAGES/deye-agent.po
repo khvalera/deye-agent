@@ -1,0 +1,228 @@
+# Ukrainian translations for deye-agent package
+# Переклад українською для пакету deye-agent.
+# Copyright (C) 2025 THE deye-agent'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the deye-agent package.
+# Automatically generated, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: deye-agent\n"
+"Report-Msgid-Bugs-To: khvalera@ukr.net\n"
+"POT-Creation-Date: 2025-11-19 22:52+0200\n"
+"PO-Revision-Date: 2025-11-19 22:52+0200\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: deye_agent/alarm_checker.py:38
+#, python-brace-format
+msgid "{emoji} Alarm: {name} below threshold"
+msgstr "{emoji} Тревога: {name} ниже порога"
+
+#: deye_agent/alarm_checker.py:42
+#, python-brace-format
+msgid "{emoji} {name} value {value} is below alarm threshold {threshold}"
+msgstr "{emoji} {name} {value} нижче порогу тривоги {threshold}"
+
+#: deye_agent/alarm_checker.py:70
+#, python-brace-format
+msgid "{emoji} Alarm cleared: {name} back to normal"
+msgstr "{emoji} Тревога знята: {name} повернувся до нормального режиму"
+
+#: deye_agent/alarm_checker.py:74
+#, python-brace-format
+msgid ""
+"{emoji} {name} value {value} exceeded the alarm cancellation threshold "
+"{threshold}"
+msgstr ""
+"{emoji} {name} {value} перевищило поріг скасування тривоги "
+"{threshold}"
+
+#: deye_agent/cli.py:16
+msgid "Deye Agent - Command line tool for retrieving data from Deye inverter"
+msgstr "Deye Agent — інструмент командного рядка для отримання даних з інвертора Deye"
+
+#: deye_agent/cli.py:23
+msgid "Path to configuration file"
+msgstr "Шлях до файлу конфігурації"
+
+#: deye_agent/cli.py:30
+msgid "Path to the yaml file with the registers"
+msgstr "Шлях до yaml-файлу з регістрами"
+
+#: deye_agent/cli.py:37
+msgid "Enable DEBUG mode"
+msgstr "Увімкнути режим налагодження"
+
+#: deye_agent/cli.py:47
+msgid "Enable MQTT publishing (overrides config)"
+msgstr "Увімкнути публікацію MQTT (перевизначає конфігурацію)"
+
+#: deye_agent/cli.py:53
+msgid "Disable MQTT publishing (overrides config)"
+msgstr "Вимкнути публікацію MQTT (перевизначає конфігурацію)"
+
+#: deye_agent/cli.py:61
+msgid "Send test notification email and exit"
+msgstr "Надіслати тестове сповіщення електронною поштою та вийти"
+
+#: deye_agent/cli.py:67
+msgid "Send test Matrix message and exit"
+msgstr "Надіслати тестове Matrix повідомлення та вийти"
+
+#: deye_agent/cli.py:76
+msgid "Command: read - read data once, run - start agent loop"
+msgstr "Команда: read - прочитати дані один раз, run - запустити агент в циклі"
+
+#: deye_agent/cli.py:98
+msgid "Starting Deye Agent..."
+msgstr "Запуск Deye Agent..."
+
+#: deye_agent/cli.py:99
+msgid "Loaded configuration from {}"
+msgstr "Завантажено конфігурацію з {}"
+
+#: deye_agent/cli.py:108
+msgid "Using registers from {}"
+msgstr "Використання регістрів з {}"
+
+#: deye_agent/cli.py:125
+msgid "Error sending test email:"
+msgstr "Помилка надсилання тестового електронного листа:"
+
+#: deye_agent/cli.py:126
+msgid "Test email sent. Exiting."
+msgstr "Тестовий лист надіслано. Вихід."
+
+#: deye_agent/cli.py:138
+msgid "Error sending test Matrix message:"
+msgstr "Помилка надсилання тестового повідомлення Matrix:"
+
+#: deye_agent/cli.py:139
+msgid "Test Matrix message sent. Exiting."
+msgstr "Тестове повідомлення Matrix надіслано. Вихід."
+
+#: deye_agent/cli.py:147 deye_agent/cli.py:177
+msgid "Inverter data:"
+msgstr "Дані інвертора:"
+
+#: deye_agent/cli.py:169
+msgid "Failed to connect to MQTT broker, exiting."
+msgstr "Не вдалося підключитися до брокера MQTT, вихід."
+
+#: deye_agent/cli.py:192
+msgid "Interrupted by user, shutting down..."
+msgstr "Перервано користувачем, завершення роботи..."
+
+#: deye_agent/cli.py:198
+msgid "Error:"
+msgstr "Помилка:"
+
+#: deye_agent/mqtt_client.py:23
+msgid "Connected to MQTT broker"
+msgstr "Підключено до брокера MQTT"
+
+#: deye_agent/mqtt_client.py:26
+msgid "MQTT connection error:"
+msgstr "Помилка підключення MQTT:"
+
+#: deye_agent/mqtt_client.py:41
+#, python-brace-format
+msgid "Published data to topic '{topic}': {payload}"
+msgstr "Опубліковані дані в темі '{topic}': {payload}"
+
+#: deye_agent/mqtt_client.py:47
+#, python-brace-format
+msgid "Failed to publish to topic '{topic}': return code {rc}"
+msgstr "Не вдалося опублікувати в темі '{topic}': код повернення {rc}"
+
+#: deye_agent/mqtt_client.py:52
+#, python-brace-format
+msgid "Error publishing to topic '{topic}': {error}"
+msgstr "Помилка публікації в темі '{topic}': {error}"
+
+#: deye_agent/mqtt_client.py:58
+msgid "Disconnected from MQTT broker"
+msgstr "Відключено від брокера MQTT"
+
+#: deye_agent/notify_email.py:20
+msgid "Preparing SMTP connection to {}:{}"
+msgstr "Підготовка SMTP-з'єднання до {}:{}"
+
+#: deye_agent/notify_email.py:26
+msgid "Using SMTP_SSL (implicit SSL)"
+msgstr "Використання SMTP_SSL (неявний SSL)"
+
+#: deye_agent/notify_email.py:32
+msgid "Using SMTP with STARTTLS"
+msgstr "Використання SMTP зі STARTTLS"
+
+#: deye_agent/notify_email.py:40
+msgid "TLS encryption established"
+msgstr "Встановлено TLS-шифрування"
+
+#: deye_agent/notify_email.py:42
+msgid "Warning: STARTTLS failed:"
+msgstr "Попередження: STARTTLS не вдалося виконати:"
+
+#: deye_agent/notify_email.py:47
+msgid "Logging in as {}"
+msgstr "Вхід як {}"
+
+#: deye_agent/notify_email.py:51
+msgid "No SMTP authentication used"
+msgstr "SMTP-автентифікація не використовується"
+
+#: deye_agent/notify_email.py:55
+msgid "Sending email to {}"
+msgstr "Надсилання електронного листа на {}"
+
+#: deye_agent/notify_email.py:61
+msgid "Notification email successfully sent to {}"
+msgstr "Сповіщення електронною поштою успішно надіслано на адресу {}"
+
+#: deye_agent/notify_email.py:64
+msgid "Error sending notification email:"
+msgstr "Помилка надсилання сповіщення електронною поштою:"
+
+#: deye_agent/notify_matrix.py:14
+msgid "Matrix config parameters missing"
+msgstr "Відсутні параметри конфігурації Matrix"
+
+#: deye_agent/notify_matrix.py:17
+msgid "Sending Matrix message to room {} on server {}"
+msgstr "Надсилання матричного повідомлення до кімнати {} на сервері {}"
+
+#: deye_agent/notify_matrix.py:47
+msgid "POST {}"
+msgstr "ПУБЛІКАЦІЯ {}"
+
+#: deye_agent/notify_matrix.py:48
+msgid "Payload: {}"
+msgstr ""
+
+#: deye_agent/notify_matrix.py:56
+msgid "Response status: {}"
+msgstr "Статус відповіді: {}"
+
+#: deye_agent/notify_matrix.py:57
+msgid "Response data: {}"
+msgstr ""
+
+#: deye_agent/notify_matrix.py:60
+msgid "Matrix server returned status {}: {}"
+msgstr ""
+
+msgid "Grid Voltage"
+msgstr "Напруга мережі"
+
+msgid "Battery Capacity"
+msgstr "Ємність акумулятора"
+
+msgid "Load Power"
+msgstr "Потужність навантаження"

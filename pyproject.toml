@@ -1,0 +1,16 @@
+[project]
+name = "deye-agent"
+version = "0.1.0"
+description = "Deye Inverter Command Line Tool and Monitoring"
+authors = [
+  {name = "khvalera", email = "khvalera@ukr.net"}
+]
+requires-python = ">=3.8"
+license = {text = "MIT"}
+
+[project.scripts]
+deye-agent = "deye_agent.cli:main"
+
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"

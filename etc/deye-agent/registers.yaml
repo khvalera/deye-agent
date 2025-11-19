@@ -1,0 +1,33 @@
+registers:
+  - name: "Grid Voltage"
+    address: 150
+    count: 2
+    scale: 0.1
+    unit: "V"
+    type: "float"
+    alarm: 80
+    cancel: 185
+    alarm_emoji: "🔌⛔"
+    cancel_emoji: "🔌✅"
+
+  - name: "Battery Capacity"
+    address: 184
+    count: 1
+    scale: 1
+    unit: "%"
+    type: "int"
+    alarm: 50
+    cancel: 55
+    alarm_emoji: "🔋⛔"
+    cancel_emoji: "🔋✅"
+
+  - name: "Load Power"
+    address: 178
+    count: 2
+    scale: 1
+    unit: "W"
+    type: "int"
+    alarm: null
+    cancel: null
+    alarm_emoji: "🔥⛔"
+    cancel_emoji: "🔥✅"
