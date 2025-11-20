@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=simple
-User=deye   # поміняй на потрібного користувача
+User=root
 ExecStart=/usr/bin/python3 -m deye_agent run --config /etc/deye-agent/deye-agent.conf --debug --mqtt-enable
 Restart=on-failure
 RestartSec=5s
