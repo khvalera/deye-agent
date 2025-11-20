@@ -1,0 +1,264 @@
+zabbix_export:
+  version: '7.2'
+  template_groups:
+    - uuid: 3dcd5bbe90534f9e8eb5c2d53756af63
+      name: Templates/Power
+  templates:
+    - uuid: 1a5202061e6847e6be5686fd1a64bdf3
+      template: 'deye agent template'
+      name: 'Deye Agent Template'
+      description: 'https://github.com/khvalera/deye-agent'
+      groups:
+        - name: Templates/Power
+      items:
+        - uuid: 386326e5c80f46f88bb1a106c463a4f4
+          name: 'Battery Capacity'
+          type: ZABBIX_ACTIVE
+          key: 'mqtt.get["deye_agent", "solar/deye/Battery_Capacity"]'
+          history: 7d
+          trends: '0'
+          units: '%'
+          tags:
+            - tag: component
+              value: power
+          triggers:
+            - uuid: 3cfad7e6c99144689e8d0f2a7fe09f63
+              expression: 'last(/deye agent template/mqtt.get["deye_agent", "solar/deye/Battery_Capacity"],#5)<=50'
+              recovery_mode: RECOVERY_EXPRESSION
+              recovery_expression: 'last(/deye agent template/mqtt.get["deye_agent", "solar/deye/Battery_Capacity"],#5)>50'
+              name: 'Battery capacity below 50% threshold'
+              priority: DISASTER
+              tags:
+                - tag: class
+                  value: power
+                - tag: target
+                  value: deye-agent
+            - uuid: aa91456bb24248b389c939090efd1cf5
+              expression: 'last(/deye agent template/mqtt.get["deye_agent", "solar/deye/Battery_Capacity"],#5)<=60 and last(/deye agent template/mqtt.get["deye_agent", "solar/deye/Battery_Capacity"],#5)>50'
+              recovery_mode: RECOVERY_EXPRESSION
+              recovery_expression: 'last(/deye agent template/mqtt.get["deye_agent", "solar/deye/Battery_Capacity"],#5)>60'
+              name: 'Battery capacity below 60% threshold'
+              priority: HIGH
+              tags:
+                - tag: class
+                  value: power
+                - tag: target
+                  value: deye-agent
+            - uuid: 11616061a5a54a55b0aef085f1609886
+              expression: 'last(/deye agent template/mqtt.get["deye_agent", "solar/deye/Battery_Capacity"],#5)<=70 and last(/deye agent template/mqtt.get["deye_agent", "solar/deye/Battery_Capacity"],#5)>60'
+              recovery_mode: RECOVERY_EXPRESSION
+              recovery_expression: 'last(/deye agent template/mqtt.get["deye_agent", "solar/deye/Battery_Capacity"],#5)>70'
+              name: 'Battery capacity below 70% threshold'
+              priority: AVERAGE
+              tags:
+                - tag: class
+                  value: power
+                - tag: target
+                  value: deye-agent
+            - uuid: 620d2fe68d594c738be8ae7abde9ba8e
+              expression: 'last(/deye agent template/mqtt.get["deye_agent", "solar/deye/Battery_Capacity"],#5)<=80 and last(/deye agent template/mqtt.get["deye_agent", "solar/deye/Battery_Capacity"],#5)>70'
+              recovery_mode: RECOVERY_EXPRESSION
+              recovery_expression: 'last(/deye agent template/mqtt.get["deye_agent", "solar/deye/Battery_Capacity"],#5)>80'
+              name: 'Battery capacity below 80% threshold'
+              priority: WARNING
+              tags:
+                - tag: class
+                  value: power
+                - tag: target
+                  value: deye-agent
+            - uuid: 6612fbe324324430a67744bfe39dff4f
+              expression: 'last(/deye agent template/mqtt.get["deye_agent", "solar/deye/Battery_Capacity"],#5)<=90 and last(/deye agent template/mqtt.get["deye_agent", "solar/deye/Battery_Capacity"],#5)>80'
+              recovery_mode: RECOVERY_EXPRESSION
+              recovery_expression: 'last(/deye agent template/mqtt.get["deye_agent", "solar/deye/Battery_Capacity"],#5)>90'
+              name: 'Battery capacity below 90% threshold'
+              priority: INFO
+              tags:
+                - tag: class
+                  value: power
+                - tag: target
+                  value: deye-agent
+        - uuid: 09185ce554584deb85d0edcc1074066d
+          name: 'Grid Voltage'
+          type: ZABBIX_ACTIVE
+          key: 'mqtt.get["deye_agent", "solar/deye/Grid_Voltage"]'
+          history: 7d
+          value_type: FLOAT
+          trends: '0'
+          units: V
+          tags:
+            - tag: component
+              value: power
+          triggers:
+            - uuid: 5ddcb229defd4a5d96f7b73764cd2522
+              expression: 'last(/deye agent template/mqtt.get["deye_agent", "solar/deye/Grid_Voltage"],#5)<=80'
+              recovery_mode: RECOVERY_EXPRESSION
+              recovery_expression: 'last(/deye agent template/mqtt.get["deye_agent", "solar/deye/Grid_Voltage"],#5)>80'
+              name: 'Mains voltage below the threshold value of 80V'
+              priority: HIGH
+              manual_close: 'YES'
+              tags:
+                - tag: class
+                  value: power
+                - tag: target
+                  value: deye-agent
+            - uuid: d23740d04d304bba8d1b8b8aa7a9d1c2
+              expression: 'last(/deye agent template/mqtt.get["deye_agent", "solar/deye/Grid_Voltage"],#5)<=185 and last(/deye agent template/mqtt.get["deye_agent", "solar/deye/Grid_Voltage"],#5)>=80'
+              recovery_mode: RECOVERY_EXPRESSION
+              recovery_expression: 'last(/deye agent template/mqtt.get["deye_agent", "solar/deye/Grid_Voltage"],#5)>185'
+              name: 'Mains voltage below the threshold value of 185V'
+              priority: HIGH
+              manual_close: 'YES'
+              tags:
+                - tag: class
+                  value: power
+                - tag: target
+                  value: deye-agent
+        - uuid: 894401517e1d475a886e3101eef6d155
+          name: 'Load Power'
+          type: ZABBIX_ACTIVE
+          key: 'mqtt.get["deye_agent", "solar/deye/Load_Power"]'
+          history: 7d
+          trends: '0'
+          units: W
+          tags:
+            - tag: component
+              value: power
+      tags:
+        - tag: class
+          value: power
+        - tag: target
+          value: deye-agent
+      dashboards:
+        - uuid: 88211952880b4ba89896c0bfa47d30f7
+          name: Main
+          display_period: '10'
+          pages:
+            - widgets:
+                - type: item
+                  name: 'Grid Voltage'
+                  width: '13'
+                  height: '3'
+                  fields:
+                    - type: INTEGER
+                      name: decimal_size
+                      value: '25'
+                    - type: ITEM
+                      name: itemid.0
+                      value:
+                        host: 'deye agent template'
+                        key: 'mqtt.get["deye_agent", "solar/deye/Grid_Voltage"]'
+                    - type: INTEGER
+                      name: rf_rate
+                      value: '30'
+                    - type: INTEGER
+                      name: show.0
+                      value: '1'
+                    - type: INTEGER
+                      name: show.1
+                      value: '2'
+                    - type: INTEGER
+                      name: show.2
+                      value: '4'
+                    - type: INTEGER
+                      name: value_size
+                      value: '35'
+                - type: graph
+                  name: 'Battery capacity graph'
+                  'y': '3'
+                  width: '40'
+                  height: '5'
+                  fields:
+                    - type: GRAPH
+                      name: graphid.0
+                      value:
+                        host: 'deye agent template'
+                        name: 'Battery capacity graph'
+                    - type: STRING
+                      name: reference
+                      value: OEMAP
+                - type: item
+                  name: 'Load Power'
+                  x: '13'
+                  width: '13'
+                  height: '3'
+                  fields:
+                    - type: INTEGER
+                      name: decimal_places
+                      value: '0'
+                    - type: INTEGER
+                      name: decimal_size
+                      value: '25'
+                    - type: ITEM
+                      name: itemid.0
+                      value:
+                        host: 'deye agent template'
+                        key: 'mqtt.get["deye_agent", "solar/deye/Load_Power"]'
+                    - type: INTEGER
+                      name: rf_rate
+                      value: '30'
+                    - type: INTEGER
+                      name: show.0
+                      value: '1'
+                    - type: INTEGER
+                      name: show.1
+                      value: '2'
+                    - type: INTEGER
+                      name: value_size
+                      value: '35'
+                - type: gauge
+                  name: 'Battery Capacity'
+                  x: '26'
+                  width: '14'
+                  height: '3'
+                  fields:
+                    - type: STRING
+                      name: bg_color
+                      value: BBDEFB
+                    - type: ITEM
+                      name: itemid.0
+                      value:
+                        host: 'deye agent template'
+                        key: 'mqtt.get["deye_agent", "solar/deye/Battery_Capacity"]'
+                    - type: STRING
+                      name: max
+                      value: '100'
+                    - type: STRING
+                      name: min
+                      value: '0'
+                    - type: INTEGER
+                      name: rf_rate
+                      value: '60'
+                - type: graph
+                  name: 'Load Power'
+                  x: '40'
+                  'y': '3'
+                  width: '32'
+                  height: '5'
+                  fields:
+                    - type: GRAPH
+                      name: graphid.0
+                      value:
+                        host: 'deye agent template'
+                        name: 'Load Power'
+                    - type: STRING
+                      name: reference
+                      value: MMAZQ
+  graphs:
+    - uuid: a61a67418a844fd2a74f57ab2a6ff877
+      name: 'Battery capacity graph'
+      ymin_type_1: FIXED
+      ymax_type_1: FIXED
+      graph_items:
+        - color: 0080FF
+          calc_fnc: ALL
+          item:
+            host: 'deye agent template'
+            key: 'mqtt.get["deye_agent", "solar/deye/Battery_Capacity"]'
+    - uuid: 3e79fc322cca4787bde6b18db2c6e4d3
+      name: 'Load Power'
+      graph_items:
+        - color: F44336
+          calc_fnc: ALL
+          item:
+            host: 'deye agent template'
+            key: 'mqtt.get["deye_agent", "solar/deye/Load_Power"]'
