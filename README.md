@@ -1,20 +1,80 @@
-# Deye Inverter
+# Deye Agent
 
-Deye Inverter Command Line Tool and Monitoring
+`deye-agent` is a command-line tool and system service for reading data from Deye inverters via RS485. It is designed to run on Linux and can operate as a systemd service, optionally pushing metrics to MQTT or other monitoring systems.
+---
+## Features
+- Reads data from Deye inverters over **RS485**  
+- Runs as a **systemd service**  
+- Can publish metrics to MQTT  
+- Includes examples for integration with **Zabbix Agent 2**  
+- Lightweight and easy to deploy  
+- Tested on:
+  - **SUN-6K-SG03LP1-EU**
+---
+## Requirements
+- Python 3.x  
+- Linux system (systemd recommended)  
+- Access to a Deye inverter via **RS485 interface**  
+- USB-RS485 or RS485–UART–TTL adapter (see connection examples below)
+---
+## Installation and Setup
+Clone the repository, install the package, and set up the systemd service with the following commands:
 
-To install the deye-agent package, first clone the repository:
+git clone https://github.com/khvalera/deye-agent.git
+cd deye-agent
+python3 setup.py install
+cp etc/deye-agent.service /etc/systemd/system/
+systemctl daemon-reload
+systemctl enable deye-agent.service
+systemctl start deye-agent.service
 
-   git clone https://github.com/khvalera/deye-agent.git
+## Configuration Files
 
-Then in the deye-agent directory, run:
+Sample configuration files are provided in the repository under:
+etc/deye-agent/
+These files allow you to configure various settings of the deye-agent, including:
 
-   python3 setup.py install
+Serial port parameters (e.g., device path, baud rate)
 
-Copy the directory to the system:
+MQTT broker connection details
 
-   etc/deye-agent
-   etc/systemd/system
+Polling intervals and timeouts
 
-Start the systemd service:
+Logging options
+Before running the agent, make sure to review and customize these configuration files according to your hardware and network environment.
 
-   systemctl restart deye-agent.service
+## RS485 Connection Examples
+
+Connection examples for the SUN-6K-SG03LP1-EU model are available in:
+
+  data/images/RS485–UART-TTL.JPG
+  data/images/USB-RS485-1.png
+
+These show how to connect the inverter to a USB-RS485 or RS485–UART–TTL interface.
+
+For other inverter models, please refer to their official documentation, as RS485 pinouts may differ.
+
+## Zabbix Integration
+
+Example files for Zabbix Agent 2 are provided in:
+
+   data/zabbix_agent2/
+
+## Included files:
+
+   deye_agent_mqtt.conf
+   Example configuration file for Zabbix Agent 2, enabling data collection via MQTT.
+
+   zbx_deye_agent_template.yaml
+   Zabbix template for importing item prototypes, triggers, and monitoring metrics from deye-agent.
+
+## Usage
+
+After installation, the agent can be started manually:
+
+   deye-agent
+
+Or monitored via systemd:
+
+   systemctl status deye-agent.service
+
