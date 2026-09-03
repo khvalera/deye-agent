@@ -309,6 +309,52 @@ def read_register(
 
 
 # =================================
+# Register value decoding
+# =================================
+def _decode_register_value(values, value_type, count):
+    """Decode one configured scalar value from Modbus register words.
+
+    Supported scalar types:
+        uint16: unsigned 16-bit integer
+        int16: signed 16-bit integer
+
+    Legacy aliases "int" and "float" intentionally preserve the project's
+    previous unsigned single-register behaviour. Scaling is applied later,
+    so a legacy "float" never means an IEEE-754 Modbus float.
+
+    Multi-register values are not guessed here. Their word order and signed
+    representation must be explicitly defined by the register protocol before
+    support is added.
+    """
+    if not values:
+        return None
+
+    normalized_type = str(value_type or "uint16").strip().lower()
+
+    if normalized_type in ("uint16", "int16", "int", "float"):
+        if count != 1:
+            raise ValueError(
+                "type '{}' requires count=1; got count={}".format(
+                    normalized_type,
+                    count
+                )
+            )
+
+        raw = values[0]
+
+        if normalized_type == "int16":
+            return raw - 0x10000 if raw & 0x8000 else raw
+
+        # uint16 and legacy int/float preserve the raw unsigned word.
+        return raw
+
+    raise ValueError(
+        "Unsupported register type '{}'. Supported types: "
+        "uint16, int16, int, float".format(value_type)
+    )
+
+
+# =================================
 # Read Deye data function
 # =================================
 def read_deye_data(config, str_to_bool, registers_file):
@@ -367,10 +413,15 @@ def read_deye_data(config, str_to_bool, registers_file):
     for reg in REGISTERS:
         name = reg.get("name")
         address = reg.get("address")
+        count = int(reg.get("count", 1))
         scale = reg.get("scale", 1)
         unit = reg.get("unit", "")
+        value_type = reg.get("type", "uint16")
 
         try:
+            if count < 1:
+                raise ValueError("count must be >= 1")
+
             # Diagnostic only: these bytes are exactly what the existing
             # reset_input_buffer() below would discard anyway.
             stale_rx = _capture_stale_rx(ser) if debug else None
@@ -383,6 +434,7 @@ def read_deye_data(config, str_to_bool, registers_file):
                 ser,
                 SLAVE_ID,
                 address,
+                count=count,
                 debug=debug,
                 name=name,
                 stale_rx=stale_rx,
@@ -392,7 +444,12 @@ def read_deye_data(config, str_to_bool, registers_file):
 
             # Keep the original delay between register reads unchanged.
             time.sleep(0.2)
-            display = vals[0] if vals else None
+
+            display = _decode_register_value(
+                vals,
+                value_type,
+                count
+            )
 
             if display is not None:
                 value = display * scale

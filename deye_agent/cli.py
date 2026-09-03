@@ -1,4 +1,6 @@
 import argparse
+import errno
+import socket
 import sys
 import time
 
@@ -9,6 +11,53 @@ from .alarm_checker import check_alarms
 from .registers_loader import load_registers
 from .notify_email import send_email
 from .notify_matrix import send_matrix_message
+
+
+# Process-wide lock used by both "read" and "run" modes.
+#
+# The serial reader opens and closes the RS485 device for each polling cycle.
+# pyserial's exclusive=True therefore protects the device only while the port
+# is actually open. This abstract UNIX socket lock protects the whole
+# deye-agent process lifetime, including the interval between polling cycles.
+#
+# Linux abstract UNIX sockets do not create filesystem entries, so this lock
+# works consistently for both the root systemd service and an interactive
+# non-root user. The kernel automatically releases the name when the owning
+# process exits, including abnormal termination.
+INSTANCE_LOCK_NAME = "\0deye-agent-instance-lock"
+
+
+def acquire_instance_lock(name=INSTANCE_LOCK_NAME):
+    """Acquire a non-blocking process-wide lock.
+
+    Returns:
+        The bound UNIX socket while the lock is held.
+        None if another deye-agent process already holds the lock.
+
+    The returned socket must remain open for the entire protected lifetime.
+    """
+    lock_socket = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+
+    try:
+        lock_socket.bind(name)
+    except OSError as exc:
+        lock_socket.close()
+
+        # EADDRINUSE means another process already owns this abstract name.
+        if getattr(exc, "errno", None) == errno.EADDRINUSE:
+            return None
+
+        raise RuntimeError(
+            "Unable to acquire Deye Agent instance lock: {}".format(exc)
+        )
+
+    return lock_socket
+
+
+def release_instance_lock(lock_socket):
+    """Release a previously acquired process-wide lock."""
+    if lock_socket is not None:
+        lock_socket.close()
 
 
 def build_arg_parser():
@@ -113,6 +162,9 @@ def main():
     update_interval = int(config.get("UPDATE_INTERVAL", "60"))
 
     # --- TEST EMAIL ---
+    #
+    # Notification tests do not access the inverter and therefore do not need
+    # the process-wide inverter lock.
     if args.test_email:
         try:
             send_email(
@@ -127,6 +179,9 @@ def main():
         return
 
     # --- TEST MATRIX ---
+    #
+    # Notification tests do not access the inverter and therefore do not need
+    # the process-wide inverter lock.
     if args.test_matrix:
         try:
             send_matrix_message(
@@ -139,8 +194,25 @@ def main():
         print(_("Test Matrix message sent. Exiting."))
         return
 
-    # --- READ MODE ---
+    # Acquire one process-wide lock before either inverter access mode starts.
+    #
+    # This complements serial.Serial(..., exclusive=True): serial exclusivity
+    # protects only the interval while /dev/ttyUSB* is open, whereas this lock
+    # also covers the sleep interval between "run" polling cycles.
     try:
+        instance_lock = acquire_instance_lock()
+    except Exception as e:
+        print(_("Error:"), e)
+        sys.exit(1)
+
+    if instance_lock is None:
+        print(
+            _("Another Deye Agent instance is already running.")
+        )
+        sys.exit(1)
+
+    try:
+        # --- READ MODE ---
         if args.command == "read":
             data = read_deye_data(config, str_to_bool, registers_file)
 
@@ -197,6 +269,9 @@ def main():
     except Exception as e:
         print(_("Error:"), e)
         sys.exit(1)
+    finally:
+        # Closing the socket releases the instance lock even if read/run raised.
+        release_instance_lock(instance_lock)
 
 
 if __name__ == "__main__":
