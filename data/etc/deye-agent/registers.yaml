@@ -1,12 +1,12 @@
 registers:
   - name: "Grid Voltage"
     address: 150
-    count: 2
+    count: 1
     scale: 0.1
     unit: "V"
-    type: "float"
-    alarm: 80
-    cancel: 185
+    type: "uint16"
+    alarm: 180
+    cancel: 200
     alarm_emoji: "🔌⛔"
     cancel_emoji: "🔌✅"
 
@@ -15,18 +15,18 @@ registers:
     count: 1
     scale: 1
     unit: "%"
-    type: "int"
-    alarm: 50
-    cancel: 55
+    type: "uint16"
+    alarm: 60
+    cancel: 65
     alarm_emoji: "🔋⛔"
     cancel_emoji: "🔋✅"
 
   - name: "Load Power"
     address: 178
-    count: 2
+    count: 1
     scale: 1
     unit: "W"
-    type: "int"
+    type: "int16"
     alarm: null
     cancel: null
     alarm_emoji: "🔥⛔"
