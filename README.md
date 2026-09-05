@@ -1,5 +1,8 @@
 # Deye Agent
 
+[English](README.md) | [Українська](README_UK.md)
+
+
 `deye-agent` is a Python 3.6 compatible monitoring agent for Deye inverters
 connected over RS485/Modbus RTU. It provides CLI diagnostics, normalized
 metrics, MQTT publishing, a cached HTTP API and a read-only web dashboard.
@@ -209,12 +212,6 @@ service over HTTPS.
 > Use HTTPS or a trusted isolated network when confidentiality is required.
 
 ## Dashboard
-
-![Deye Agent 0.2.0 web dashboard](data/images/deye-agent-dashboard-0.2.0.png)
-
-The screenshot above shows the authenticated read-only dashboard with live
-grid, load, battery and PV values plus RAM-only history charts.
-
 
 The dashboard is dependency-free and reads `/api/v1/overview` plus the history
 endpoint. It includes:
