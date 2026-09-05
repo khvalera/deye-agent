@@ -1,8 +1,9 @@
-
 import os
 
 CONFIG_PATH = "/etc/deye-agent/deye-agent.conf"
 REGISTERS_FILE = "/etc/deye-agent/registers.yaml"
+PROFILES_DIR = "/etc/deye-agent/profiles"
+DEFAULT_PROFILE = "single_phase_storage"
 
 
 def str_to_bool(s):
@@ -12,7 +13,7 @@ def str_to_bool(s):
 def load_config(path=CONFIG_PATH):
     config = {}
     if not os.path.isfile(path):
-        raise FileNotFoundError(f"Config file {path} not found")
+        raise FileNotFoundError("Config file {} not found".format(path))
 
     with open(path, "r", encoding="utf-8") as f:
         for line in f:

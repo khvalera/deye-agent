@@ -5,7 +5,12 @@ After=network.target
 [Service]
 Type=simple
 User=root
-ExecStart=/usr/bin/python3 -m deye_agent run --config /etc/deye-agent/deye-agent.conf --debug --mqtt-enable
+
+# Runtime behaviour is controlled by /etc/deye-agent/deye-agent.conf.
+# Do not force --debug or --mqtt-enable here because CLI flags override
+# configuration file values.
+ExecStart=/usr/bin/python3 -m deye_agent run --config /etc/deye-agent/deye-agent.conf
+
 Restart=on-failure
 RestartSec=5s
 

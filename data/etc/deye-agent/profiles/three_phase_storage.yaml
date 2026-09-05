@@ -1,0 +1,10 @@
+profile:
+  id: three_phase_storage
+  family: Three-phase storage inverter
+  status: reference-only
+  supported: false
+  notes: Separate register map documented in MODBUS_RTU_DEYE.doc and Modbus.Deye.pdf.
+    Runtime polling intentionally disabled until validated on matching three-phase
+    hardware.
+read_blocks: []
+registers: []

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Deye Agent — Login</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body class="login-page">
+  <main class="login-shell">
+    <section class="login-card">
+      <div class="login-brand">Deye Agent</div>
+      <h1 data-i18n="login_title">Sign in</h1>
+      <p class="muted" data-i18n="login_subtitle">Enter your credentials to open the dashboard.</p>
+
+      <form class="login-form" method="post" action="/login" autocomplete="on">
+        <label>
+          <span data-i18n="login_username">Username</span>
+          <input name="username" type="text" autocomplete="username" required autofocus maxlength="128">
+        </label>
+
+        <label>
+          <span data-i18n="login_password">Password</span>
+          <input name="password" type="password" autocomplete="current-password" required maxlength="512">
+        </label>
+
+        <p id="loginError" class="login-error" hidden data-i18n="login_invalid">Invalid username or password.</p>
+
+        <button type="submit" data-i18n="login_button">Sign in</button>
+      </form>
+
+      <label class="language-control login-language">
+        <span data-i18n="language">Language</span>
+        <select id="languageSelect" aria-label="Language">
+          <option value="en">English</option>
+          <option value="uk">Українська</option>
+          <option value="pl">Polski</option>
+          <option value="de">Deutsch</option>
+        </select>
+      </label>
+    </section>
+  </main>
+  <script src="/login.js"></script>
+</body>
+</html>

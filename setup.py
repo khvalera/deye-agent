@@ -19,7 +19,7 @@ def find_mo_files():
 
 setup(
     name="deye-agent",
-    version="0.1.0",
+    version="0.2.0",
     description=(
         "Deye Agent — tool for retrieving data from Deye inverter "
         "and sending notifications"
@@ -42,8 +42,17 @@ setup(
     ],
 
     package_data={
-        "deye_agent": find_mo_files(),
+        "deye_agent": (
+            find_mo_files()
+            + [
+                "web/*.html",
+                "web/*.css",
+                "web/*.js",
+                "web/i18n/*.json",
+            ]
+        ),
     },
+    include_package_data=True,
 
     entry_points={
         "console_scripts": [

@@ -1,12 +1,12 @@
 [project]
 name = "deye-agent"
-version = "0.1.0"
+version = "0.2.0"
 description = "Deye Inverter Command Line Tool and Monitoring"
 authors = [
   {name = "khvalera", email = "khvalera@ukr.net"}
 ]
-requires-python = ">=3.8"
-license = {text = "MIT"}
+requires-python = ">=3.6"
+license = {text = "Apache-2.0"}
 
 [project.scripts]
 deye-agent = "deye_agent.cli:main"

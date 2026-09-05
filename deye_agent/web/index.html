@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Deye Agent</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>Deye Agent</h1>
+      <p id="deviceSubtitle" class="muted" data-i18n="loading">Loading inverter status…</p>
+    </div>
+    <div class="header-controls">
+      <label class="language-control">
+        <span data-i18n="language">Language</span>
+        <select id="languageSelect" aria-label="Language">
+          <option value="en">English</option>
+          <option value="uk">Українська</option>
+          <option value="pl">Polski</option>
+          <option value="de">Deutsch</option>
+        </select>
+      </label>
+      <div class="status-wrap">
+        <span id="statusBadge" class="badge badge-neutral">Starting</span>
+        <span id="ageText" class="muted">—</span>
+        <form method="post" action="/logout" class="logout-form">
+          <button type="submit" class="logout-button" data-i18n="logout">Sign out</button>
+        </form>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero-grid">
+      <article class="card card-large">
+        <div class="card-title" data-i18n="grid">Grid</div>
+        <div class="metric-main"><span id="gridPower">—</span><span class="unit">W</span></div>
+        <div class="metric-row">
+          <span><b id="gridVoltage">—</b> V</span>
+          <span><b id="gridCurrent">—</b> A</span>
+          <span><b id="gridFrequency">—</b> Hz</span>
+          <span><span data-i18n="relay">Relay</span>: <b id="gridRelay">—</b></span>
+        </div>
+      </article>
+
+      <article class="card card-large">
+        <div class="card-title" data-i18n="load">Load</div>
+        <div class="metric-main"><span id="loadPower">—</span><span class="unit">W</span></div>
+        <div class="metric-row">
+          <span><b id="inverterVoltage">—</b> V</span>
+          <span><b id="loadCurrent">—</b> A</span>
+          <span><b id="loadFrequency">—</b> Hz</span>
+        </div>
+      </article>
+
+      <article class="card card-large">
+        <div class="card-title" data-i18n="battery">Battery</div>
+        <div class="metric-main"><span id="batterySoc">—</span><span class="unit">%</span></div>
+        <div class="metric-row">
+          <span><b id="batteryVoltage">—</b> V</span>
+          <span><b id="batteryCurrent">—</b> A</span>
+          <span><b id="batteryPower">—</b> W</span>
+        </div>
+      </article>
+
+      <article class="card card-large">
+        <div class="card-title" data-i18n="pv">PV</div>
+        <div class="metric-main"><span id="pvTotalPower">—</span><span class="unit">W</span></div>
+        <div class="metric-row">
+          <span>PV1 <b id="pv1Power">—</b> W</span>
+          <span>PV2 <b id="pv2Power">—</b> W</span>
+        </div>
+      </article>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <h2 data-i18n="history">History</h2>
+        <label class="range-control">
+          <span data-i18n="period">Period</span>
+          <select id="historyRange">
+            <option value="15">15 min</option>
+            <option value="60" selected>1 h</option>
+            <option value="180">3 h</option>
+            <option value="360">6 h</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="chart-grid">
+        <article class="card chart-card">
+          <div class="card-title" data-i18n="power_history">Power history</div>
+          <canvas id="powerChart" height="220"></canvas>
+          <div id="powerLegend" class="chart-legend"></div>
+        </article>
+
+        <article class="card chart-card">
+          <div class="card-title" data-i18n="battery_soc_history">Battery SOC</div>
+          <canvas id="socChart" height="220"></canvas>
+        </article>
+
+        <article class="card chart-card">
+          <div class="card-title" data-i18n="grid_voltage_history">Grid voltage</div>
+          <canvas id="gridVoltageChart" height="220"></canvas>
+        </article>
+
+        <article class="card chart-card">
+          <div class="card-title" data-i18n="battery_voltage_history">Battery voltage</div>
+          <canvas id="batteryVoltageChart" height="220"></canvas>
+        </article>
+
+        <article class="card chart-card">
+          <div class="card-title" data-i18n="inverter_voltage_history">Inverter output voltage</div>
+          <canvas id="inverterVoltageChart" height="220"></canvas>
+        </article>
+      </div>
+      <p id="historyStatus" class="muted history-status">—</p>
+    </section>
+
+    <section class="section">
+      <h2 data-i18n="system">System</h2>
+      <div class="grid">
+        <article class="card">
+          <div class="card-title" data-i18n="inverter">Inverter</div>
+          <div class="kv"><span data-i18n="output">Output</span><b id="inverterPower">— W</b></div>
+          <div class="kv"><span data-i18n="frequency">Frequency</span><b id="inverterFrequency">— Hz</b></div>
+          <div class="kv"><span>IGBT</span><b id="igbtTemp">— °C</b></div>
+        </article>
+
+        <article class="card">
+          <div class="card-title" data-i18n="battery_bms">Battery BMS</div>
+          <div class="kv"><span data-i18n="voltage">Voltage</span><b id="bmsVoltage">— V</b></div>
+          <div class="kv"><span data-i18n="current">Current</span><b id="bmsCurrent">— A</b></div>
+          <div class="kv"><span data-i18n="temperature">Temperature</span><b id="bmsTemp">— °C</b></div>
+          <div class="kv"><span data-i18n="type">Type</span><b id="bmsType">—</b></div>
+        </article>
+
+        <article class="card">
+          <div class="card-title" data-i18n="status">Status</div>
+          <div class="kv"><span data-i18n="run_state">Run state</span><b id="runState">—</b></div>
+          <div class="kv"><span data-i18n="warning">Warning</span><b id="warningState">—</b></div>
+          <div class="kv"><span data-i18n="fault">Fault</span><b id="faultState">—</b></div>
+          <div class="kv"><span data-i18n="sd_card">SD card</span><b id="sdState">—</b></div>
+        </article>
+
+        <article class="card">
+          <div class="card-title" data-i18n="generator">Generator</div>
+          <div class="kv"><span data-i18n="relay">Relay</span><b id="generatorRelay">—</b></div>
+          <div class="kv"><span data-i18n="switch">Switch</span><b id="generatorSwitch">—</b></div>
+          <div class="kv"><span data-i18n="frequency">Frequency</span><b id="generatorFrequency">— Hz</b></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 data-i18n="energy_today">Energy today</h2>
+      <div class="grid energy-grid">
+        <article class="mini-card"><span data-i18n="grid_buy">Grid buy</span><b id="energyGridBuy">— kWh</b></article>
+        <article class="mini-card"><span data-i18n="grid_sell">Grid sell</span><b id="energyGridSell">— kWh</b></article>
+        <article class="mini-card"><span data-i18n="load">Load</span><b id="energyLoad">— kWh</b></article>
+        <article class="mini-card"><span data-i18n="pv">PV</span><b id="energyPv">— kWh</b></article>
+        <article class="mini-card"><span data-i18n="battery_charge">Battery charge</span><b id="energyBatteryCharge">— kWh</b></article>
+        <article class="mini-card"><span data-i18n="battery_discharge">Battery discharge</span><b id="energyBatteryDischarge">— kWh</b></article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 data-i18n="device">Device</h2>
+      <article class="card">
+        <div class="device-grid">
+          <div class="kv"><span data-i18n="serial_number">Serial number</span><b id="serialNumber">—</b></div>
+          <div class="kv"><span data-i18n="type">Type</span><b id="deviceType">—</b></div>
+          <div class="kv"><span data-i18n="rated_power">Rated power</span><b id="ratedPower">— W</b></div>
+          <div class="kv"><span data-i18n="protocol">Protocol</span><b id="protocolVersion">—</b></div>
+          <div class="kv"><span data-i18n="profile">Profile</span><b id="profileName">—</b></div>
+          <div class="kv"><span data-i18n="generation">Generation</span><b id="generation">—</b></div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    <span data-i18n="footer_title">Deye Agent read-only dashboard</span>
+    <span id="footerUpdate" data-i18n="no_data">No data yet</span>
+  </footer>
+
+  <script src="/app.js"></script>
+</body>
+</html>
