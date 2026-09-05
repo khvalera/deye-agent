@@ -74,6 +74,25 @@ data/etc/deye-agent/
 /etc/deye-agent/profiles/single_phase_storage.yaml
 ```
 
+
+## Приклади підключення RS485
+
+У репозиторії залишаються початкові фотографії та схеми підключення. Вони
+корисні для підключення інвертора через USB-RS485 або RS485-UART-TTL адаптер.
+
+### RS485-UART-TTL
+
+[![Підключення RS485-UART-TTL](data/images/RS485–UART-TTL.JPG)](data/images/RS485–UART-TTL.JPG)
+
+### USB-RS485
+
+[![Підключення USB-RS485 1](data/images/USB-RS485-1.png)](data/images/USB-RS485-1.png)
+
+[![Підключення USB-RS485 2](data/images/USB-RS485-2.JPG)](data/images/USB-RS485-2.JPG)
+
+> RS485 pinout може відрізнятися між сімействами інверторів. Перед
+> підключенням потрібно перевірити pinout саме для конкретного інвертора.
+
 ## Базове використання
 
 Показати список профілів протоколу:
@@ -147,6 +166,19 @@ Legacy MQTT output також збережений.
 MQTT client використовує MQTT 3.1.1, обмежений час очікування connection/publish
 та явну перевірку завершення публікації.
 
+
+## Інтеграція з Zabbix
+
+Початкові приклади інтеграції із Zabbix Agent 2 залишаються в:
+
+```text
+data/zabbix_agent2/
+```
+
+У репозиторії також залишається існуючий скріншот Zabbix template:
+
+[![Zabbix Deye Agent Template](data/images/zabbix-deye-agent.png)](data/images/zabbix-deye-agent.png)
+
 ## HTTP API та dashboard
 
 HTTP layer читає лише runtime cache. Відкриття або оновлення сторінки в браузері
@@ -210,6 +242,9 @@ Browser sessions використовують випадкові server-side tok
 > використовуй HTTPS або довірену ізольовану мережу.
 
 ## Dashboard
+
+![Web dashboard Deye Agent 0.2.0](data/images/deye-agent-dashboard-0.2.0.png)
+
 
 Dashboard не має зовнішніх залежностей і читає `/api/v1/overview` та history endpoint.
 

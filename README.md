@@ -76,6 +76,26 @@ The validated runtime profile should normally be installed as:
 /etc/deye-agent/profiles/single_phase_storage.yaml
 ```
 
+
+## RS485 connection examples
+
+The repository keeps the original connection photos and diagrams. They are
+still part of the project and are useful when wiring the inverter to a
+USB-RS485 or RS485-UART-TTL adapter.
+
+### RS485-UART-TTL
+
+[![RS485-UART-TTL connection](data/images/RS485–UART-TTL.JPG)](data/images/RS485–UART-TTL.JPG)
+
+### USB-RS485
+
+[![USB-RS485 connection 1](data/images/USB-RS485-1.png)](data/images/USB-RS485-1.png)
+
+[![USB-RS485 connection 2](data/images/USB-RS485-2.JPG)](data/images/USB-RS485-2.JPG)
+
+> RS485 pinouts can differ between inverter families. Verify the connector
+> pinout for the exact inverter before wiring.
+
 ## Basic usage
 
 List protocol profiles:
@@ -149,6 +169,19 @@ The legacy MQTT output remains available.
 The MQTT client uses MQTT 3.1.1, bounded connection/publish waits and explicit
 publication completion tracking.
 
+
+## Zabbix integration
+
+The original Zabbix Agent 2 integration examples remain available under:
+
+```text
+data/zabbix_agent2/
+```
+
+The repository includes the existing Zabbix visualization:
+
+[![Zabbix Deye Agent Template](data/images/zabbix-deye-agent.png)](data/images/zabbix-deye-agent.png)
+
 ## HTTP API and dashboard
 
 The HTTP layer reads only the runtime cache. Opening or refreshing the browser
@@ -212,6 +245,9 @@ service over HTTPS.
 > Use HTTPS or a trusted isolated network when confidentiality is required.
 
 ## Dashboard
+
+![Deye Agent 0.2.0 web dashboard](data/images/deye-agent-dashboard-0.2.0.png)
+
 
 The dashboard is dependency-free and reads `/api/v1/overview` plus the history
 endpoint. It includes:
