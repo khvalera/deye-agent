@@ -25,8 +25,7 @@ uses validated read-only registers and does not expose inverter write controls.
 - PBKDF2-SHA256 password hashing and RAM-only authenticated sessions.
 - Fixed numeric formatting for voltage, current and frequency values.
 
-See [CHANGELOG.md](CHANGELOG.md) and
-[docs/RELEASE_0.2.0.md](docs/RELEASE_0.2.0.md) for details.
+For a detailed list of changes, see [CHANGELOG.md](CHANGELOG.md).
 
 ## Hardware/profile status
 
