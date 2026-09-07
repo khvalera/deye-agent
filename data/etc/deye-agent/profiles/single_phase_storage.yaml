@@ -29,16 +29,12 @@ registers:
     2: Normal
     3: Alarm
     4: Fault
-  alarm: null
-  cancel: null
 - name: Generator Energy Today
   address: 62
   type: uint16
   scale: 0.1
   precision: 1
   unit: kWh
-  alarm: null
-  cancel: null
 - name: PV Energy Year
   address: 68
   count: 2
@@ -46,24 +42,18 @@ registers:
   scale: 0.1
   precision: 1
   unit: kWh
-  alarm: null
-  cancel: null
 - name: Battery Charge Energy Today
   address: 70
   type: uint16
   scale: 0.1
   precision: 1
   unit: kWh
-  alarm: null
-  cancel: null
 - name: Battery Discharge Energy Today
   address: 71
   type: uint16
   scale: 0.1
   precision: 1
   unit: kWh
-  alarm: null
-  cancel: null
 - name: Battery Charge Energy Total
   address: 72
   count: 2
@@ -71,8 +61,6 @@ registers:
   scale: 0.1
   precision: 1
   unit: kWh
-  alarm: null
-  cancel: null
 - name: Battery Discharge Energy Total
   address: 74
   count: 2
@@ -80,24 +68,18 @@ registers:
   scale: 0.1
   precision: 1
   unit: kWh
-  alarm: null
-  cancel: null
 - name: Grid Buy Energy Today
   address: 76
   type: uint16
   scale: 0.1
   precision: 1
   unit: kWh
-  alarm: null
-  cancel: null
 - name: Grid Sell Energy Today
   address: 77
   type: uint16
   scale: 0.1
   precision: 1
   unit: kWh
-  alarm: null
-  cancel: null
 - name: Grid Frequency
   address: 79
   count: 1
@@ -105,8 +87,6 @@ registers:
   precision: 2
   unit: Hz
   type: uint16
-  alarm: null
-  cancel: null
 - name: Grid Buy Energy Total
   addresses:
   - 78
@@ -115,8 +95,6 @@ registers:
   scale: 0.1
   precision: 1
   unit: kWh
-  alarm: null
-  cancel: null
 - name: Grid Sell Energy Total
   address: 81
   count: 2
@@ -124,24 +102,18 @@ registers:
   scale: 0.1
   precision: 1
   unit: kWh
-  alarm: null
-  cancel: null
 - name: Generator Operating Time Today
   address: 83
   type: uint16
   scale: 0.1
   precision: 1
   unit: h
-  alarm: null
-  cancel: null
 - name: Load Energy Today
   address: 84
   type: uint16
   scale: 0.1
   precision: 1
   unit: kWh
-  alarm: null
-  cancel: null
 - name: Load Energy Total
   address: 85
   count: 2
@@ -149,8 +121,6 @@ registers:
   scale: 0.1
   precision: 1
   unit: kWh
-  alarm: null
-  cancel: null
 - name: Load Energy Year
   address: 87
   count: 2
@@ -158,8 +128,6 @@ registers:
   scale: 0.1
   precision: 1
   unit: kWh
-  alarm: null
-  cancel: null
 - name: IGBT Temperature
   address: 91
   type: uint16
@@ -167,8 +135,6 @@ registers:
   offset: -100.0
   precision: 1
   unit: C
-  alarm: null
-  cancel: null
 - name: Generator Energy Total
   addresses:
   - 92
@@ -177,65 +143,45 @@ registers:
   scale: 0.1
   precision: 1
   unit: kWh
-  alarm: null
-  cancel: null
 - name: SD Card Status
   address: 94
   type: uint16
   value_map:
     1000: Fault
     2000: Normal
-  alarm: null
-  cancel: null
 - name: Other Test Flags
   address: 100
   count: 1
   type: uint16
-  alarm: null
-  cancel: null
 - name: Warning Word 1
   address: 101
   count: 1
   type: uint16
-  alarm: null
-  cancel: null
 - name: Warning Word 2
   address: 102
   count: 1
   type: uint16
-  alarm: null
-  cancel: null
 - name: Has Warning
   addresses:
   - 101
   - 102
   type: bool_any_nonzero
-  alarm: null
-  cancel: null
 - name: Fault Word 1
   address: 103
   count: 1
   type: uint16
-  alarm: null
-  cancel: null
 - name: Fault Word 2
   address: 104
   count: 1
   type: uint16
-  alarm: null
-  cancel: null
 - name: Fault Word 3
   address: 105
   count: 1
   type: uint16
-  alarm: null
-  cancel: null
 - name: Fault Word 4
   address: 106
   count: 1
   type: uint16
-  alarm: null
-  cancel: null
 - name: Has Fault
   addresses:
   - 103
@@ -243,8 +189,6 @@ registers:
   - 105
   - 106
   type: bool_any_nonzero
-  alarm: null
-  cancel: null
 - name: Battery Corrected Capacity
   address: 107
   count: 1
@@ -252,8 +196,6 @@ registers:
   scale: 1
   precision: 0
   unit: Ah
-  alarm: null
-  cancel: null
 - name: PV Energy Today
   address: 108
   count: 1
@@ -261,8 +203,6 @@ registers:
   precision: 1
   unit: kWh
   type: uint16
-  alarm: null
-  cancel: null
 - name: PV1 Voltage
   address: 109
   count: 1
@@ -270,8 +210,6 @@ registers:
   precision: 1
   unit: V
   type: uint16
-  alarm: null
-  cancel: null
 - name: PV1 Current
   address: 110
   count: 1
@@ -279,8 +217,6 @@ registers:
   precision: 1
   unit: A
   type: uint16
-  alarm: null
-  cancel: null
 - name: PV2 Voltage
   address: 111
   count: 1
@@ -288,8 +224,6 @@ registers:
   precision: 1
   unit: V
   type: uint16
-  alarm: null
-  cancel: null
 - name: PV2 Current
   address: 112
   count: 1
@@ -297,8 +231,6 @@ registers:
   precision: 1
   unit: A
   type: uint16
-  alarm: null
-  cancel: null
 - name: Grid Voltage
   address: 150
   count: 1
@@ -306,10 +238,6 @@ registers:
   precision: 1
   unit: V
   type: uint16
-  alarm: 180
-  cancel: 200
-  alarm_emoji: 🔌⛔
-  cancel_emoji: 🔌✅
 - name: Inverter Output Voltage
   address: 154
   count: 1
@@ -317,8 +245,6 @@ registers:
   precision: 1
   unit: V
   type: uint16
-  alarm: null
-  cancel: null
 - name: Grid Current
   address: 160
   count: 1
@@ -326,34 +252,24 @@ registers:
   precision: 2
   unit: A
   type: int16
-  alarm: null
-  cancel: null
 - name: Grid Power
   address: 169
   count: 1
   scale: 1
   unit: W
   type: int16
-  alarm: null
-  cancel: null
 - name: Inverter Output Power
   address: 175
   count: 1
   scale: 1
   unit: W
   type: int16
-  alarm: null
-  cancel: null
 - name: Load Power
   address: 178
   count: 1
   scale: 1
   unit: W
   type: int16
-  alarm: null
-  cancel: null
-  alarm_emoji: 🔥⛔
-  cancel_emoji: 🔥✅
 - name: Load Current
   address: 179
   count: 1
@@ -361,8 +277,6 @@ registers:
   precision: 2
   unit: A
   type: int16
-  alarm: null
-  cancel: null
 - name: Battery Temperature
   address: 182
   count: 1
@@ -371,8 +285,6 @@ registers:
   precision: 1
   unit: C
   type: uint16
-  alarm: null
-  cancel: null
 - name: Battery Voltage
   address: 183
   count: 1
@@ -380,42 +292,30 @@ registers:
   precision: 2
   unit: V
   type: uint16
-  alarm: null
-  cancel: null
 - name: Battery Capacity
   address: 184
   count: 1
   scale: 1
   unit: '%'
   type: uint16
-  alarm: 60
-  cancel: 65
-  alarm_emoji: 🔋⛔
-  cancel_emoji: 🔋✅
 - name: PV1 Power
   address: 186
   count: 1
   scale: 1
   unit: W
   type: uint16
-  alarm: null
-  cancel: null
 - name: PV2 Power
   address: 187
   count: 1
   scale: 1
   unit: W
   type: uint16
-  alarm: null
-  cancel: null
 - name: Battery Power
   address: 190
   count: 1
   scale: 1
   unit: W
   type: int16
-  alarm: null
-  cancel: null
 - name: Battery Current
   address: 191
   count: 1
@@ -423,8 +323,6 @@ registers:
   precision: 2
   unit: A
   type: int16
-  alarm: null
-  cancel: null
 - name: Load Frequency
   address: 192
   count: 1
@@ -432,8 +330,6 @@ registers:
   precision: 2
   unit: Hz
   type: uint16
-  alarm: null
-  cancel: null
 - name: Inverter Output Frequency
   address: 193
   count: 1
@@ -441,16 +337,12 @@ registers:
   precision: 2
   unit: Hz
   type: uint16
-  alarm: null
-  cancel: null
 - name: Grid Relay Status
   address: 194
   type: uint16
   value_map:
     0: Disconnected
     1: Closed
-  alarm: null
-  cancel: null
 - name: Generator Relay Status
   address: 195
   type: uint16
@@ -461,8 +353,6 @@ registers:
     1: Closed
     2: Reserved
     3: Closed while generator running
-  alarm: null
-  cancel: null
 - name: Generator Switch Signal
   address: 195
   type: uint16
@@ -471,20 +361,14 @@ registers:
   value_map:
     0: 'Off'
     1: 'On'
-  alarm: null
-  cancel: null
 - name: Generator Signal
   address: 195
   type: uint16
   mask: 3840
   shift: 8
-  alarm: null
-  cancel: null
 - name: Generator Frequency
   address: 196
   type: uint16
   scale: 0.01
   precision: 2
   unit: Hz
-  alarm: null
-  cancel: null

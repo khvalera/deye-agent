@@ -19,7 +19,7 @@ def find_mo_files():
 
 setup(
     name="deye-agent",
-    version="0.2.0",
+    version="0.2.1",
     description=(
         "Deye Agent — tool for retrieving data from Deye inverter "
         "and sending notifications"

@@ -2,6 +2,54 @@
 
 All notable changes to Deye Agent are documented here.
 
+## 0.2.1 - 2026-09-07
+
+### Alarm rules and notifications
+- Moved alarm policy out of the Modbus register/profile map into standalone
+  `/etc/deye-agent/alarms.yaml` schema version 1.
+- Added `le` and `ge` operators with explicit trigger/clear hysteresis.
+- Added rule enable state, stable rule IDs, custom trigger messages and custom
+  clear messages.
+- Added literal placeholders: `{name}`, `{value}`, `{unit}`, `{alarm}`,
+  `{cancel}`, `{profile}`.
+- Added hot reload when `alarms.yaml` changes; no daemon restart is required for
+  valid rule edits.
+- Added boolean threshold handling for `Has Warning` and `Has Fault`.
+- Preserved `ALARM_CONFIRMATIONS` consecutive-sample confirmation behavior.
+- Added bundled English alarm rules for inverter fault/warning, grid
+  voltage/frequency, battery capacity/temperature, IGBT temperature and load
+  power.
+
+### MQTT alarm events
+- Added `NOTIFY_MQTT_ENABLED` and `NOTIFY_MQTT_TOPIC`.
+- Reused the existing MQTT broker host, port and credentials instead of
+  duplicating transport configuration.
+- Added stable `deye-agent.alarm.v1` JSON payloads for `alarm` and `clear`
+  events.
+
+### Local telemetry cache / Webconfig integration
+- Added atomic `/run/deye-agent/telemetry.json` cache using schema
+  `deye-agent.telemetry-cache.v1`.
+- The cache mirrors telemetry already acquired by the daemon and never performs
+  additional RS485/Modbus reads.
+- Added metric units, active profile and UTC update timestamp for local read-only
+  UI consumers.
+
+### Protocol/profile cleanup
+- Removed legacy `alarm`, `cancel`, `alarm_emoji` and `cancel_emoji` fields from
+  `single_phase_storage.yaml` and the legacy `registers.yaml` copy.
+- Alarm thresholds are now independent from hardware register definitions.
+
+### Packaging and release tooling
+- Version bumped to 0.2.1 in Python and RPM metadata.
+- Added `build_source.sh`, `build_rpm.sh` and `release_check.sh`.
+- Added `MANIFEST.in` for complete source distributions.
+- Updated RPM packaging to own backend configuration, profiles, alarms and the
+  systemd unit with `noreplace` configuration semantics.
+- Removed tracked Python bytecode and `__pycache__` artifacts from the release
+  tree.
+- Updated English and Ukrainian documentation and added release notes.
+
 ## 0.2.0 - 2026-09-05
 
 ### RS485 / Modbus

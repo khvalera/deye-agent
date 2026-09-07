@@ -2,31 +2,46 @@
 
 [English](README.md) | [Українська](README_UK.md)
 
-
 `deye-agent` is a Python 3.6 compatible monitoring agent for Deye inverters
 connected over RS485/Modbus RTU. It provides CLI diagnostics, normalized
-metrics, MQTT publishing, a cached HTTP API and a read-only web dashboard.
+metrics, MQTT publishing, threshold notifications, a cached HTTP API and a
+read-only web dashboard.
 
-The current production path is intentionally conservative: normal monitoring
-uses validated read-only registers and does not expose inverter write controls.
+The production path is intentionally conservative: normal monitoring uses
+validated read-only registers and does not expose inverter write controls.
 
-## Release 0.2.0 highlights
+## Release 0.2.1 highlights
 
-- Reliable RS485 reads with retries and strict Modbus response validation.
-- Process-wide inverter-access lock to prevent concurrent local consumers.
-- Protocol profiles with a hardware-validated `single_phase_storage` profile.
-- Read-only device, battery/BMS, settings, system-status and snapshot commands.
-- Stable normalized metrics schema with **89 metric IDs**.
-- Stable MQTT metric topics in addition to the legacy MQTT payload.
-- Cached HTTP API that does not trigger browser-originated RS485 reads.
-- Responsive web dashboard with live overview and RAM-only history charts.
-- Web UI translations: English, Ukrainian, Polish and German.
-- Mandatory login/password protection whenever the HTTP API is enabled.
-- PBKDF2-SHA256 password hashing and RAM-only authenticated sessions.
-- Fixed numeric formatting for voltage, current and frequency values.
+Release 0.2.1 keeps the read-only acquisition and API architecture from 0.2.0
+and adds configurable alarm rules and local Webconfig-friendly telemetry.
 
-See [CHANGELOG.md](CHANGELOG.md) and
-[docs/RELEASE_0.2.0.md](docs/RELEASE_0.2.0.md) for details.
+- Added standalone `/etc/deye-agent/alarms.yaml` rules, independent from the
+  Modbus register/profile map.
+- Added `le` and `ge` threshold operators with explicit hysteresis through
+  separate alarm and clear thresholds.
+- Added custom alarm/clear messages with safe literal placeholders.
+- Added alarm delivery through Email, Matrix and MQTT.
+- Added stable MQTT alarm documents using schema `deye-agent.alarm.v1`.
+- Added boolean threshold support for aggregate `Has Warning` and `Has Fault`
+  metrics.
+- Added hot reload of `alarms.yaml`; editing the rules does not require a
+  daemon restart.
+- Added `/run/deye-agent/telemetry.json`, written from telemetry already read by
+  the daemon. Local UI consumers can read it without initiating extra RS485
+  traffic.
+- Removed legacy alarm/cancel fields from the protocol profile; threshold policy
+  now lives only in `alarms.yaml`.
+- Added source/RPM build scripts and a release validation script.
+- Updated the RPM spec so backend configuration, profiles, alarms and the
+  systemd unit are owned by the `deye-agent` package.
+- Removed tracked Python bytecode/cache artifacts from the release tree.
+
+The bundled alarm thresholds are examples for the currently validated profile.
+Review them for the exact inverter, battery, grid requirements and installation
+before enabling notification channels.
+
+For the full release notes, see [CHANGELOG.md](CHANGELOG.md) and
+[docs/RELEASE_0.2.1.md](docs/RELEASE_0.2.1.md).
 
 ## Hardware/profile status
 
@@ -58,13 +73,15 @@ The current ClearOS production environment uses Python 3.6.8.
 
 ## Installation
 
+Source installation of the Python package:
+
 ```bash
 git clone https://github.com/khvalera/deye-agent.git
 cd deye-agent
 python3 setup.py install
 ```
 
-Review the example configuration under:
+Example backend configuration is stored under:
 
 ```text
 data/etc/deye-agent/
@@ -76,12 +93,50 @@ The validated runtime profile should normally be installed as:
 /etc/deye-agent/profiles/single_phase_storage.yaml
 ```
 
+The threshold-rule file is:
+
+```text
+/etc/deye-agent/alarms.yaml
+```
+
+The RPM packaging path installs the backend configuration, profiles, alarm
+rules and systemd service as package-owned files. Configuration files are
+installed with `noreplace` semantics so package upgrades do not silently
+replace local configuration.
+
+## Building release artifacts
+
+Run the release checks first:
+
+```bash
+./release_check.sh
+```
+
+Create a GitHub/source-style tarball from the current Git ref:
+
+```bash
+./build_source.sh
+```
+
+The default output is:
+
+```text
+dist/deye-agent-0.2.1.tar.gz
+```
+
+Build source and binary RPMs on a system with `rpmbuild`:
+
+```bash
+./build_rpm.sh
+```
+
+The RPM build uses an isolated tree under `dist/rpmbuild/` and does not modify
+system RPM build directories.
 
 ## RS485 connection examples
 
 The repository keeps the original connection photos and diagrams. They are
-still part of the project and are useful when wiring the inverter to a
-USB-RS485 or RS485-UART-TTL adapter.
+useful when wiring the inverter to a USB-RS485 or RS485-UART-TTL adapter.
 
 ### RS485-UART-TTL
 
@@ -146,9 +201,103 @@ inventory
 profiles
 ```
 
+## Alarm rules
+
+Alarm policy is stored separately from the hardware register map:
+
+```text
+ALARMS_FILE=/etc/deye-agent/alarms.yaml
+ALARM_CONFIRMATIONS=2
+```
+
+`alarms.yaml` schema version 1 supports these operators:
+
+```text
+le  alarm when value <= alarm; clear when value >= cancel
+ge  alarm when value >= alarm; clear when value <= cancel
+```
+
+For `le`, `cancel` must be greater than `alarm`. For `ge`, `cancel` must be
+lower than `alarm`. This creates explicit hysteresis and avoids rapid
+alarm/clear oscillation around one threshold.
+
+Example rule:
+
+```yaml
+battery_temperature_low:
+  enabled: true
+  metric: Battery Temperature
+  operator: le
+  alarm: 5
+  cancel: 10
+  message: "Battery temperature dropped to {value} C."
+  clear_message: "Battery temperature recovered to {value} C."
+```
+
+Supported message placeholders are:
+
+```text
+{name} {value} {unit} {alarm} {cancel} {profile}
+```
+
+The file is monitored for changes and valid edits are loaded without restarting
+the daemon. If the file is invalid, threshold notifications fail closed while
+the main monitoring loop can continue.
+
+The bundled rules cover inverter fault/warning state, low/high grid voltage,
+low/high grid frequency, low battery capacity, low/high battery temperature,
+high IGBT temperature and high load power.
+
+### Alarm notification channels
+
+Email and Matrix continue to use their existing global enable switches:
+
+```text
+NOTIFY_EMAIL_ENABLED=false
+NOTIFY_MATRIX_ENABLED=false
+```
+
+MQTT alarm events reuse the existing broker settings:
+
+```text
+NOTIFY_MQTT_ENABLED=false
+NOTIFY_MQTT_TOPIC=solar/deye/alarms
+```
+
+If `NOTIFY_MQTT_TOPIC` is empty, the destination defaults to
+`<MQTT_TOPIC>/alarms`.
+
+MQTT alarm messages use the stable JSON schema:
+
+```text
+deye-agent.alarm.v1
+```
+
+with event type `alarm` or `clear`, rule ID, metric name, current value, unit,
+operator, alarm/clear thresholds, profile and rendered message.
+
+## Local telemetry cache
+
+The running daemon writes its already-acquired telemetry to:
+
+```text
+/run/deye-agent/telemetry.json
+```
+
+The cache uses schema:
+
+```text
+deye-agent.telemetry-cache.v1
+```
+
+It contains the active profile, UTC update timestamp, metric values and units.
+Writing the cache does **not** perform another Modbus read. It is intended for
+local read-only consumers such as ClearOS Webconfig, where the privileged local
+helper can read the root-owned cache without opening the serial device.
+
 ## Stable metrics and MQTT
 
-Release 0.2.0 exposes **89 stable metric IDs** under the
+The stable metric catalog contains **89 metric IDs** under the
 `deye-agent.metrics.v1` schema.
 
 When both switches are enabled:
@@ -169,10 +318,9 @@ The legacy MQTT output remains available.
 The MQTT client uses MQTT 3.1.1, bounded connection/publish waits and explicit
 publication completion tracking.
 
-
 ## Zabbix integration
 
-The original Zabbix Agent 2 integration examples remain available under:
+The Zabbix Agent 2 integration examples remain available under:
 
 ```text
 data/zabbix_agent2/
@@ -246,8 +394,7 @@ service over HTTPS.
 
 ## Dashboard
 
-![Deye Agent 0.2.0 web dashboard](data/images/deye-agent-dashboard-0.2.0.png)
-
+![Deye Agent web dashboard](data/images/deye-agent-dashboard-0.2.0.png)
 
 The dashboard is dependency-free and reads `/api/v1/overview` plus the history
 endpoint. It includes:
@@ -270,8 +417,6 @@ Numeric formatting is stable in the UI, for example:
 50.00 Hz
 ```
 
-rather than changing width when trailing zeroes are present.
-
 Supported web languages:
 
 ```text
@@ -283,7 +428,7 @@ Deutsch
 
 ## RAM history
 
-History is intentionally memory-only in this release:
+History is intentionally memory-only:
 
 ```text
 HTTP_HISTORY_ENABLED=true
@@ -292,11 +437,11 @@ HTTP_HISTORY_RETENTION_SECONDS=21600
 ```
 
 It is reset when the agent process starts again. Persistent on-disk history is
-not part of release 0.2.0.
+not part of release 0.2.1.
 
 ## Read-only register coverage
 
-The release includes validated read-only mappings for:
+The supported profile includes validated read-only mappings for:
 
 - Device information.
 - Energy/statistics.
@@ -307,7 +452,7 @@ The release includes validated read-only mappings for:
 - Selected inverter settings.
 - Selected system/status values.
 
-Two notable values added during current hardware validation are:
+Notable validated values include:
 
 ```text
 Register 79  -> Grid input frequency, scale 0.01 Hz
@@ -334,16 +479,6 @@ The read path includes:
 
 Normal telemetry keeps the existing open/read/close cycle. The combined
 snapshot uses one shared serial session for its coalesced read blocks.
-
-## Alarm confirmation
-
-Alarm notifications can require consecutive valid abnormal samples:
-
-```text
-ALARM_CONFIRMATIONS=2
-```
-
-A failed/absent read does not count as a confirmation.
 
 ## License
 

@@ -3,6 +3,7 @@ import os
 CONFIG_PATH = "/etc/deye-agent/deye-agent.conf"
 REGISTERS_FILE = "/etc/deye-agent/registers.yaml"
 PROFILES_DIR = "/etc/deye-agent/profiles"
+ALARMS_FILE = "/etc/deye-agent/alarms.yaml"
 DEFAULT_PROFILE = "single_phase_storage"
 
 

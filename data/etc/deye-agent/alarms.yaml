@@ -1,0 +1,108 @@
+version: 1
+
+# Threshold notification rules are independent from the Modbus register map.
+# Supported operators:
+#   le: alarm when value <= alarm, clear when value >= cancel
+#   ge: alarm when value >= alarm, clear when value <= cancel
+#
+# Supported message placeholders:
+#   {name} {value} {unit} {alarm} {cancel} {profile}
+alarms:
+  inverter_fault:
+    enabled: true
+    metric: Has Fault
+    operator: ge
+    alarm: 1
+    cancel: 0
+    message: "⚠️ The inverter reports an active fault."
+    clear_message: "✅ The inverter fault has cleared."
+
+  inverter_warning:
+    enabled: true
+    metric: Has Warning
+    operator: ge
+    alarm: 1
+    cancel: 0
+    message: "⚠️ The inverter reports an active warning."
+    clear_message: "✅ The inverter warning has cleared."
+
+  grid_voltage_low:
+    enabled: true
+    metric: Grid Voltage
+    operator: le
+    alarm: 180
+    cancel: 200
+    message: "🔌 Low grid voltage: {value} {unit} (threshold ≤ {alarm} {unit})."
+    clear_message: "🔌✅ Grid voltage recovered: {value} {unit}."
+
+  grid_voltage_high:
+    enabled: true
+    metric: Grid Voltage
+    operator: ge
+    alarm: 255
+    cancel: 250
+    message: "🔌 High grid voltage: {value} {unit} (threshold ≥ {alarm} {unit})."
+    clear_message: "🔌✅ Grid voltage returned to the normal range: {value} {unit}."
+
+  grid_frequency_low:
+    enabled: true
+    metric: Grid Frequency
+    operator: le
+    alarm: 47.5
+    cancel: 49.0
+    message: "⚡ Low grid frequency: {value} {unit} (threshold ≤ {alarm} {unit})."
+    clear_message: "⚡✅ Grid frequency recovered: {value} {unit}."
+
+  grid_frequency_high:
+    enabled: true
+    metric: Grid Frequency
+    operator: ge
+    alarm: 52.5
+    cancel: 51.0
+    message: "⚡ High grid frequency: {value} {unit} (threshold ≥ {alarm} {unit})."
+    clear_message: "⚡✅ Grid frequency returned to the normal range: {value} {unit}."
+
+  battery_capacity_low:
+    enabled: true
+    metric: Battery Capacity
+    operator: le
+    alarm: 60
+    cancel: 65
+    message: "🔋 Low battery charge: {value}{unit} (threshold ≤ {alarm}{unit})."
+    clear_message: "🔋✅ Battery charge recovered: {value}{unit}."
+
+  battery_temperature_low:
+    enabled: true
+    metric: Battery Temperature
+    operator: le
+    alarm: 5
+    cancel: 10
+    message: "🥶 Battery temperature dropped to {value} °C (threshold ≤ {alarm} °C)."
+    clear_message: "🌡️✅ Battery temperature recovered to {value} °C."
+
+  battery_temperature_high:
+    enabled: true
+    metric: Battery Temperature
+    operator: ge
+    alarm: 45
+    cancel: 40
+    message: "🔥 High battery temperature: {value} °C (threshold ≥ {alarm} °C)."
+    clear_message: "🌡️✅ Battery temperature dropped to {value} °C."
+
+  igbt_temperature_high:
+    enabled: true
+    metric: IGBT Temperature
+    operator: ge
+    alarm: 80
+    cancel: 70
+    message: "🔥 High IGBT temperature: {value} °C (threshold ≥ {alarm} °C)."
+    clear_message: "✅ IGBT temperature dropped to {value} °C."
+
+  load_power_high:
+    enabled: true
+    metric: Load Power
+    operator: ge
+    alarm: 4500
+    cancel: 4000
+    message: "🔥 High load power: {value} {unit} (threshold ≥ {alarm} {unit})."
+    clear_message: "✅ Load power dropped to {value} {unit}."
