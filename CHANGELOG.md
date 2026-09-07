@@ -42,7 +42,7 @@ All notable changes to Deye Agent are documented here.
 
 ### Packaging and release tooling
 - Version bumped to 0.2.1 in Python and RPM metadata.
-- Added `build_source.sh`, `build_rpm.sh` and `release_check.sh`.
+- Added `packaging/build_source.sh`, `packaging/build_rpm.sh` and `packaging/release_check.sh`.
 - Added `MANIFEST.in` for complete source distributions.
 - Updated RPM packaging to own backend configuration, profiles, alarms and the
   systemd unit with `noreplace` configuration semantics.

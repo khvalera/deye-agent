@@ -109,13 +109,13 @@ replace local configuration.
 Run the release checks first:
 
 ```bash
-./release_check.sh
+./packaging/release_check.sh
 ```
 
 Create a GitHub/source-style tarball from the current Git ref:
 
 ```bash
-./build_source.sh
+./packaging/build_source.sh
 ```
 
 The default output is:
@@ -127,7 +127,7 @@ dist/deye-agent-0.2.1.tar.gz
 Build source and binary RPMs on a system with `rpmbuild`:
 
 ```bash
-./build_rpm.sh
+./packaging/build_rpm.sh
 ```
 
 The RPM build uses an isolated tree under `dist/rpmbuild/` and does not modify

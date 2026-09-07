@@ -106,13 +106,13 @@ service як файли пакета. Конфігураційні файли м
 Спочатку виконай release checks:
 
 ```bash
-./release_check.sh
+./packaging/release_check.sh
 ```
 
 Створити source tarball з поточного Git ref:
 
 ```bash
-./build_source.sh
+./packaging/build_source.sh
 ```
 
 За замовчуванням створюється:
@@ -124,7 +124,7 @@ dist/deye-agent-0.2.1.tar.gz
 Для RPM на системі з `rpmbuild`:
 
 ```bash
-./build_rpm.sh
+./packaging/build_rpm.sh
 ```
 
 RPM build використовує ізольоване дерево `dist/rpmbuild/` і не змінює
