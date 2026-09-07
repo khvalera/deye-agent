@@ -106,13 +106,13 @@ service як файли пакета. Конфігураційні файли м
 Спочатку виконай release checks:
 
 ```bash
-./packaging/release_check.sh
+./release_check.sh
 ```
 
-Створити source tarball з поточного Git ref:
+Створити source tarball:
 
 ```bash
-./packaging/build_source.sh
+./build_source.sh
 ```
 
 За замовчуванням створюється:
@@ -121,14 +121,14 @@ service як файли пакета. Конфігураційні файли м
 dist/deye-agent-0.2.1.tar.gz
 ```
 
-Для RPM на системі з `rpmbuild`:
+Для RPM на ClearOS/EL7 використовуй repository RPM builder:
 
 ```bash
-./packaging/build_rpm.sh
+./packaging/build-rpm.sh
 ```
 
-RPM build використовує ізольоване дерево `dist/rpmbuild/` і не змінює
-системні RPM build directories.
+RPM builder створює source archive з поточного Git `HEAD`, використовує
+`packaging/deye-agent.spec` та збирає пакет у `${HOME}/rpmbuild`.
 
 ## Приклади підключення RS485
 

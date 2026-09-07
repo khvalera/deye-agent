@@ -109,13 +109,13 @@ replace local configuration.
 Run the release checks first:
 
 ```bash
-./packaging/release_check.sh
+./release_check.sh
 ```
 
-Create a GitHub/source-style tarball from the current Git ref:
+Create a source tarball:
 
 ```bash
-./packaging/build_source.sh
+./build_source.sh
 ```
 
 The default output is:
@@ -124,14 +124,14 @@ The default output is:
 dist/deye-agent-0.2.1.tar.gz
 ```
 
-Build source and binary RPMs on a system with `rpmbuild`:
+Build source and binary RPMs on ClearOS/EL7 with the repository RPM builder:
 
 ```bash
-./packaging/build_rpm.sh
+./packaging/build-rpm.sh
 ```
 
-The RPM build uses an isolated tree under `dist/rpmbuild/` and does not modify
-system RPM build directories.
+The RPM builder creates its source archive from the current Git `HEAD`, uses
+`packaging/deye-agent.spec`, and builds under `${HOME}/rpmbuild`.
 
 ## RS485 connection examples
 
