@@ -1,6 +1,6 @@
 Name:           deye-agent
-Version:        0.2.0
-Release:        3%{?dist}
+Version:        0.2.1
+Release:        1%{?dist}
 Summary:        Agent for retrieving and monitoring data from Deye inverters
 
 License:        Apache-2.0
@@ -46,10 +46,10 @@ find %{buildroot}%{python_site}/deye_agent \
 
 # CLI entry point.
 install -d -m 0755 %{buildroot}%{_bindir}
-cat > %{buildroot}%{_bindir}/deye-agent <<'EOF'
+cat > %{buildroot}%{_bindir}/deye-agent <<'EOF_SCRIPT'
 #!/bin/sh
 exec /usr/bin/python3 -m deye_agent.cli "$@"
-EOF
+EOF_SCRIPT
 chmod 0755 %{buildroot}%{_bindir}/deye-agent
 
 # Persistent configuration and protocol maps.
@@ -59,6 +59,10 @@ install -d -m 0755 %{buildroot}%{_sysconfdir}/deye-agent/profiles
 install -m 0600 \
   data/etc/deye-agent/deye-agent.conf \
   %{buildroot}%{_sysconfdir}/deye-agent/deye-agent.conf
+
+install -m 0644 \
+  data/etc/deye-agent/alarms.yaml \
+  %{buildroot}%{_sysconfdir}/deye-agent/alarms.yaml
 
 install -m 0644 \
   data/etc/deye-agent/registers.yaml \
@@ -105,6 +109,7 @@ fi
 
 %dir %{_sysconfdir}/deye-agent
 %config(noreplace) %{_sysconfdir}/deye-agent/deye-agent.conf
+%config(noreplace) %{_sysconfdir}/deye-agent/alarms.yaml
 %{_sysconfdir}/deye-agent/registers.yaml
 %dir %{_sysconfdir}/deye-agent/profiles
 %{_sysconfdir}/deye-agent/profiles/single_phase_storage.yaml
@@ -113,6 +118,12 @@ fi
 %{unitdir}/deye-agent.service
 
 %changelog
+* Mon Sep 07 2026 khvalera <khvalera@ukr.net> - 0.2.1-1
+- Added configurable alarm rules in alarms.yaml with low/high thresholds and hysteresis.
+- Added Email, Matrix and MQTT alarm notification support.
+- Added runtime telemetry cache for ClearOS Webconfig without extra RS485 reads.
+- Added low battery temperature alert and cleaned alarm metadata from profiles.
+
 * Sat Sep 05 2026 khvalera <khvalera@ukr.net> - 0.2.0-3
 - Added complete ClearOS 7 RPM dependencies for the Python 3.6 runtime.
 - Added explicit dependencies for pyserial, PyYAML, paho-mqtt, chardet and idna.
